@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, SiteType } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -29,13 +29,13 @@ async function main() {
       dataSources: [
         {
           siteName: 'Pop Mart Official',
-          siteType: 'OFFICIAL_STORE',
+          siteType: SiteType.OFFICIAL_STORE,
           url: 'https://www.popmart.com/products/molly-kenny-scharf',
           checkFrequency: 30 // Check every 30 minutes
         },
         {
           siteName: 'Amazon',
-          siteType: 'MARKETPLACE',
+          siteType: SiteType.MARKETPLACE,
           url: 'https://www.amazon.com/dp/example-molly',
           checkFrequency: 60 // Check every hour
         }
@@ -56,7 +56,7 @@ async function main() {
       dataSources: [
         {
           siteName: 'Pop Mart Official',
-          siteType: 'OFFICIAL_STORE',
+          siteType: SiteType.OFFICIAL_STORE,
           url: 'https://www.popmart.com/products/skullpanda-sound',
           checkFrequency: 30
         }
@@ -77,13 +77,13 @@ async function main() {
       dataSources: [
         {
           siteName: 'eBay',
-          siteType: 'MARKETPLACE',
+          siteType: SiteType.MARKETPLACE,
           url: 'https://www.ebay.com/itm/vintage-rolling-stones-tee',
           checkFrequency: 120 // Check every 2 hours
         },
         {
           siteName: 'Etsy',
-          siteType: 'MARKETPLACE',
+          siteType: SiteType.MARKETPLACE,
           url: 'https://www.etsy.com/listing/vintage-stones-shirt',
           checkFrequency: 180 // Check every 3 hours
         }
@@ -117,13 +117,13 @@ async function main() {
       dataSources: [
         {
           siteName: 'Pop Mart Official',
-          siteType: 'OFFICIAL_STORE',
+          siteType: SiteType.OFFICIAL_STORE,
           url: 'https://www.popmart.com/products/dimoo-space-travel',
           checkFrequency: 45
         },
         {
           siteName: 'Amazon',
-          siteType: 'MARKETPLACE', 
+          siteType: SiteType.MARKETPLACE, 
           url: 'https://www.amazon.com/dp/example-dimoo',
           checkFrequency: 90
         }
