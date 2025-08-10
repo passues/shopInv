@@ -10,3 +10,13 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient({
 })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+// Helper function to safely execute database operations
+export async function safeDbOperation<T>(operation: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await operation()
+  } catch (error) {
+    console.error('Database operation failed:', error)
+    return fallback
+  }
+}

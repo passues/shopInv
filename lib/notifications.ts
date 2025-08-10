@@ -1,6 +1,5 @@
 import { prisma } from './prisma'
-
-type NotificationType = 'LOW_STOCK' | 'OUT_OF_STOCK' | 'RESTOCKED' | 'NEW_ITEM'
+import { NotificationType } from '@prisma/client'
 
 export async function createNotification(
   itemId: string,

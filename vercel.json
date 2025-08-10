@@ -4,11 +4,9 @@
       "ENABLE_EXPERIMENTAL_COREPACK": "1"
     }
   },
-  "buildCommand": "npm run build",
-  "installCommand": "npm install && npx prisma generate",
   "functions": {
     "app/api/**/*.js": {
-      "maxDuration": 10
+      "maxDuration": 30
     }
   }
 }

@@ -1,33 +1,27 @@
-import { prisma } from '@/lib/prisma'
+import { prisma, safeDbOperation } from '@/lib/prisma'
 import ItemCard from '@/components/ItemCard'
 import { Package, AlertCircle } from 'lucide-react'
 
 async function getItems() {
-  try {
-    const items = await prisma.item.findMany({
+  return safeDbOperation(
+    () => prisma.item.findMany({
       where: { isActive: true },
       orderBy: { updatedAt: 'desc' }
-    })
-    return items
-  } catch (error) {
-    console.error('Error fetching items:', error)
-    return []
-  }
+    }),
+    []
+  )
 }
 
 async function getNotifications() {
-  try {
-    const notifications = await prisma.notification.findMany({
+  return safeDbOperation(
+    () => prisma.notification.findMany({
       where: { isRead: false },
       include: { item: true },
       orderBy: { createdAt: 'desc' },
       take: 5
-    })
-    return notifications
-  } catch (error) {
-    console.error('Error fetching notifications:', error)
-    return []
-  }
+    }),
+    []
+  )
 }
 
 // Error boundary component
