@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
-import { InventoryMonitor } from '@/lib/inventory-monitor'
 
 export async function POST() {
   try {
+    // Dynamic import to avoid build-time issues
+    const { InventoryMonitor } = await import('@/lib/inventory-monitor')
+    
     await InventoryMonitor.checkAllItems()
     
     return NextResponse.json({

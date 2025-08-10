@@ -20,7 +20,15 @@ export interface ScrapingConfig {
 
 export class WebScraper {
   private static async fetchPage(url: string): Promise<string> {
+    // Only run on server-side runtime, not during build
+    if (typeof window !== 'undefined') {
+      throw new Error('Scraping only available on server-side')
+    }
+
     try {
+      // Dynamic import to avoid build-time issues
+      const fetch = await import('node-fetch').then(mod => mod.default).catch(() => globalThis.fetch)
+      
       const response = await fetch(url, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',

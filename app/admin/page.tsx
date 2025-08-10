@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, Package, AlertCircle } from 'lucide-react'
+import Image from 'next/image'
 import ItemForm from '@/components/ItemForm'
 import InventoryUpdateForm from '@/components/InventoryUpdateForm'
 
@@ -129,10 +130,12 @@ export default function AdminPage() {
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
                         {item.imageUrl ? (
-                          <img
+                          <Image
                             className="h-16 w-16 rounded-lg object-cover"
                             src={item.imageUrl}
                             alt={item.name}
+                            width={64}
+                            height={64}
                           />
                         ) : (
                           <div className="h-16 w-16 rounded-lg bg-gray-100 flex items-center justify-center">
