@@ -2,6 +2,13 @@ import { PrismaClient, SiteType } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+interface DataSourceInput {
+  siteName: string
+  siteType: SiteType
+  url: string
+  checkFrequency: number
+}
+
 async function main() {
   // Check if data already exists
   const existingItems = await prisma.item.count()
@@ -146,7 +153,10 @@ async function main() {
         await prisma.dataSource.create({
           data: {
             itemId: created.id,
-            ...sourceData
+            siteName: sourceData.siteName,
+            siteType: sourceData.siteType,
+            url: sourceData.url,
+            checkFrequency: sourceData.checkFrequency
           }
         })
         console.log(`  Added data source: ${sourceData.siteName}`)
