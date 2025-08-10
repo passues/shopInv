@@ -20,11 +20,14 @@ model Item {
   maxStockLevel  Int    @default(100)
   price       Float?
   isActive    Boolean  @default(true)
+  autoTrack   Boolean  @default(false) // Enable automatic tracking
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
   notifications Notification[]
   inventoryHistory InventoryHistory[]
+  dataSources DataSource[]
+  priceHistory PriceHistory[]
   
   @@map("items")
 }
@@ -55,9 +58,74 @@ model InventoryHistory {
   @@map("inventory_history")
 }
 
+model DataSource {
+  id          String   @id @default(cuid())
+  itemId      String
+  siteName    String   // "Amazon", "Pop Mart Official", "eBay", etc.
+  siteType    SiteType
+  url         String   // Product page URL
+  priceSelector String? // CSS selector for price
+  stockSelector String? // CSS selector for stock status
+  titleSelector String? // CSS selector for title
+  imageSelector String? // CSS selector for image
+  isActive    Boolean  @default(true)
+  lastChecked DateTime?
+  checkFrequency Int    @default(60) // minutes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  
+  @@map("data_sources")
+}
+
+model PriceHistory {
+  id          String   @id @default(cuid())
+  itemId      String
+  price       Float
+  source      String   // Which site this price came from
+  inStock     Boolean  @default(true)
+  stockLevel  Int?     // If available
+  scrapedAt   DateTime @default(now())
+  
+  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  
+  @@map("price_history")
+}
+
+model ScrapingLog {
+  id          String   @id @default(cuid())
+  source      String
+  status      ScrapingStatus
+  itemsChecked Int     @default(0)
+  errors      String?
+  duration    Int?     // milliseconds
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  
+  @@map("scraping_logs")
+}
+
 enum NotificationType {
   LOW_STOCK
   OUT_OF_STOCK
   RESTOCKED
   NEW_ITEM
+  PRICE_DROP
+  PRICE_INCREASE
+  BACK_IN_STOCK
+}
+
+enum SiteType {
+  OFFICIAL_STORE
+  MARKETPLACE
+  RETAILER
+  RESELLER
+}
+
+enum ScrapingStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
 }
