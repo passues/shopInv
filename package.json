@@ -15,7 +15,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "postinstall": "prisma generate",
     "railway:deploy": "npm run build",
-    "db:migrate": "prisma db push && tsx prisma/seed-automated.ts"
+    "db:migrate": "prisma db push && tsx prisma/seed-automated.ts",
+    "deploy:prod": "prisma db push --accept-data-loss && tsx prisma/seed-automated.ts && npm start"
   },
   "dependencies": {
     "@prisma/client": "^5.15.0",
