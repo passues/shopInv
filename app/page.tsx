@@ -50,10 +50,13 @@ function ErrorFallback({ error }: { error: Error }) {
 }
 
 export default async function Home() {
-  const [items, notifications] = await Promise.all([
-    getItems(),
-    getNotifications()
-  ])
+  try {
+    const [items, notifications] = await Promise.all([
+      getItems(),
+      getNotifications()
+    ])
+
+    // If we got here, database connection is working
 
   const lowStockItems = items.filter(item => item.inventoryLevel <= item.minStockLevel)
   const outOfStockItems = items.filter(item => item.inventoryLevel === 0)
@@ -162,4 +165,8 @@ export default async function Home() {
       </div>
     </div>
   )
+  } catch (error) {
+    console.error('Error in Home component:', error)
+    return <ErrorFallback error={error as Error} />
+  }
 }
