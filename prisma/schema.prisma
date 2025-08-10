@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Item {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  brand       String?
+  sku         String?  @unique
+  imageUrl    String?
+  inventoryLevel Int    @default(0)
+  minStockLevel  Int    @default(0)
+  maxStockLevel  Int    @default(100)
+  price       Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  notifications Notification[]
+  inventoryHistory InventoryHistory[]
+  
+  @@map("items")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  itemId    String
+  type      String   // "LOW_STOCK", "OUT_OF_STOCK", "RESTOCKED", "NEW_ITEM"
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  
+  @@map("notifications")
+}
+
+model InventoryHistory {
+  id        String   @id @default(cuid())
+  itemId    String
+  oldLevel  Int
+  newLevel  Int
+  reason    String?
+  createdAt DateTime @default(now())
+  
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  
+  @@map("inventory_history")
+}
