@@ -30,6 +30,25 @@ async function getNotifications() {
   }
 }
 
+// Error boundary component
+function ErrorFallback({ error }: { error: Error }) {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-red-50 border border-red-200 rounded-md p-4">
+        <h2 className="text-lg font-medium text-red-800">Something went wrong</h2>
+        <p className="text-red-600 mt-2">
+          There was an error loading the inventory data. Please try refreshing the page.
+        </p>
+        {process.env.NODE_ENV === 'development' && (
+          <pre className="mt-4 text-xs text-red-500 bg-red-100 p-2 rounded">
+            {error.message}
+          </pre>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default async function Home() {
   const [items, notifications] = await Promise.all([
     getItems(),
